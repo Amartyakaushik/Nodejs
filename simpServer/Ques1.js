@@ -22,7 +22,8 @@ const server= http.createServer((req,res)=>{
         readableStream.on('end',()=>{
             console.log("read all data in the file.");
         });
-    
+   
+ 
         readableStream.on('error',(err)=>{
             console.log('error while reading the data',err);
         })
