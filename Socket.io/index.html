@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+</head>
+<body>
+        <button  onclick="enterName()">Enter your name</button>
+
+
+    <ul id="list"></ul>
+    <form id="form">
+        <input type="text" id="input">
+        <button>Send</button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const form = document.getElementById('form');
+        const input = document.getElementById('input');
+        const list = document.getElementById('list');
+        form.addEventListener('submit', e=>{
+            e.preventDefault();
+            if(input.value){
+                socket.emit('chat message', input.value);
+                input.value = " ";
+            }
+        });
+        
+        function enterName(){
+            const name = prompt("Please enter your name","Amartya kaushik");
+            if(name != null){
+
+        socket.on('chat message',msg=>{
+            const item = document.createElement('li');
+                
+            item.textContent = name + ' : ' + msg;
+            list.appendChild(item);
+        });
+    }
+}
+    </script>
+
+    <script>
+    </script>
+</body>
+</html>
