@@ -1,0 +1,9 @@
+// April 09
+
+1- install mongo db  (using the link below) 
+-> https://www.mongodb.com/try/download/community-kubernetes-operator
+
+
+// run these commands in the terminal in VScode.
+2- npm init -y
+3- npm install express mongoose
