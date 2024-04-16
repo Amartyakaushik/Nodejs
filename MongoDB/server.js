@@ -1,13 +1,18 @@
 const express = require('express');
 const mongoose = require('mongoose');
-
+const path = require('path');
 const app = express();
 const port = 4000;
 
 // middleware
 app.use(express.json());
 
-mongoose.connect('mongodb://127.0.0.1:27017/usermanagement_db')
+app.use(express.static(path.join(__dirname, 'Mongo DB')));
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'user.html'));
+});
+
+mongoose.connect('mongodb+srv://kamartya58:<password>@cluster0.e1bxqhn.mongodb.net/')
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('Error connecting to MongoDB:',err));
 
@@ -42,14 +47,53 @@ app.post('/users', (req, res) => {
     .catch(err => res.status(400).json({message: err.message}));
 });
 
-app.put('/users/:id', (req, res) => {
+// app.put('/users/:id', (req, res) => {
+//     const userId = req.params.id;
+//     const updatedData = {
+//         name: req.body.name,
+
+//     };
+
+//     User.findByIdAndUpdate(userId,)
+// })
+
+
+app.put('/users/:id', (req,res)=>{
     const userId = req.params.id;
-    const updatedData = {
+    const updateData = {
         name: req.body.name,
-
+        email: req.body.password,
+        password: req.body.password
     };
+    User.findByIdAndUpdate(userId, updateData, { new: true })
+    .then (updatedUser => {
+        if(!updatedUser){
+            return res.status(404).json({message: 'User not found'});
+        }
+        res.json(updatedUser);
+    })
+    .catch(err=>res.status(400).json({message: err.message}));
+});
 
-    User.findByIdAndUpdate(userId,)
-})
+app.delete('/users/:id',(req,res)=>{
+    const userId = req.params.id;
+    User.findByIdAndDelete(userId)
+    .then(deletedUser => {
+        if(!deletedUser){
+            return res.status(404).json({message: 'User not found'});
+        }
+        res.json({message: 'User deleted successfully'});
+    })
+    .catch(err=> res.status(400).json({message: err.message}));
+});
 
+// const fetchUsers = () =>{
+
+// }
+
+// users.forEach(user => {
+//     const li = document.createElement('li');
+//     li.textContent = `
+//     `
+// });
 app.listen(port, () => console.log(`Your server is running on ${port}`));
