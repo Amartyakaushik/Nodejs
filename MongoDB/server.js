@@ -3,16 +3,20 @@ const mongoose = require('mongoose');
 const path = require('path');
 const app = express();
 const port = 4000;
-
+// 17-april
+require('dotenv').config();
 // middleware
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname, 'Mongo DB')));
+
+// 17
+const mongoURI = process.env.MONGO_URI;
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'user.html'));
 });
 
-mongoose.connect('mongodb+srv://kamartya58:<password>@cluster0.e1bxqhn.mongodb.net/')
+mongoose.connect(mongoURI)
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('Error connecting to MongoDB:',err));
 
